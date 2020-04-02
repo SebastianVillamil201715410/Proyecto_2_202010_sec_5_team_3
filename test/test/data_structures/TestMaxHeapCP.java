@@ -1,26 +1,23 @@
 package test.data_structures;
 
-import model.data_structures.ArregloDinamico;
-
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestArregloDinamico {
+import model.data_structures.ArregloDinamico;
+import model.data_structures.MaxHeapCP;
+import model.logic.Comparendo;
 
-	private ArregloDinamico arreglo;
+public class TestMaxHeapCP {
+	private MaxHeapCP heap;
 	private static int TAMANO=100;
 	
 	@Before
 	public void setUp1() {
-		arreglo= new ArregloDinamico();
+	
 	}
 
 	public void setUp2() {
-		for(int i =0; i< TAMANO*2; i++){
-			arreglo.agregar(""+i);
-		}
+		
 	}
 
 	@Test
@@ -33,5 +30,4 @@ public class TestArregloDinamico {
 		setUp2();
 		// TODO
 	}
-
 }
