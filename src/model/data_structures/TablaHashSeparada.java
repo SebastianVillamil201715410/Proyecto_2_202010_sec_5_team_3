@@ -11,7 +11,7 @@ public class TablaHashSeparada <K extends Comparable<K>,V>
 
 	private int M; 
 
-	private int N; 
+	private int N; 	
 
 	public TablaHashSeparada() 
 	{ 

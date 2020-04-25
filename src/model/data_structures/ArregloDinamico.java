@@ -137,4 +137,14 @@ public class ArregloDinamico <T extends Comparable <T>> implements IArregloDinam
 		tamanoAct++;	
 	}
 
+		@Override
+		public void set(int pos, T dato) {
+			
+		}
+
+		@Override
+		public void exch(int pos1, int pos2) {
+
+		}
+
 }
