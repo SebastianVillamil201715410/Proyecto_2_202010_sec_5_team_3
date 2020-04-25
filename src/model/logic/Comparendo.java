@@ -1,6 +1,9 @@
 package model.logic;
 
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Comparendo implements Comparable<Comparendo>{
@@ -41,6 +44,20 @@ public class Comparendo implements Comparable<Comparendo>{
 		return String.valueOf(fecha_hora);
 	}
 	
+	public Date darFechaHoraDate()
+	{
+		String fecha = darFechaHora().replace("\\", "");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd-HH:MM:ss");
+		Date fechaDate = null;
+		try {
+			fechaDate = sdf.parse(fecha);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fechaDate;
+	}
+	
 	public String darDescripcion()
 	{
 		return String.valueOf(des_infrac);
@@ -74,6 +91,16 @@ public class Comparendo implements Comparable<Comparendo>{
 	public String darLatitudLongitud()
 	{
 		return String.valueOf(latitud) + String.valueOf(longitud);
+	}
+	
+	public String darLatitud()
+	{
+		return String.valueOf(latitud);
+	}
+	
+	public String darLongitud()
+	{
+		return String.valueOf(longitud);
 	}
 	
 	public int compareTo(Comparendo o) {
