@@ -47,10 +47,10 @@ public class Modelo{
 	private Stack<Comparendo> pila;	//Pila de comparendos
 
 	private Queue<Comparendo> cola;	//Cola de comparendos
-	
+
 	private IArregloDinamico<Comparendo> datos;
-	
-	private ArbolNegroRojo<Comparendo,V> arbolrn;
+
+	//private ArbolNegroRojo<Comparendo,V> arbolrn;
 
 	//METODOS
 
@@ -113,7 +113,7 @@ public class Modelo{
 	{
 		return lista.darElemento(0);
 	}
-	
+
 	/**
 	 * Mezcla los elementos de la lista 
 	 * @param list
@@ -122,44 +122,44 @@ public class Modelo{
 	{
 		Random random = new Random(); 
 		int count = list.size() - 1;
-		
+
 		for (int i = count; i > 1; i--) 
 		{
 			Collections.swap(list, i, random.nextInt(i));
 		} 
 	}
-	
+
 	public String cargaDeDatosHashLinearProbing()
 	{
 		String s ="nada";
-		
-			ArregloDinamico<Comparendo> comparendos = new ArregloDinamico<Comparendo>();
-			ArregloDinamico<String> comparendosLlaves = new ArregloDinamico<String>();
-			ArregloDinamico<String> tresPartes = new ArregloDinamico<String>();
-			
-			SimpleDateFormat formatoFechas = new SimpleDateFormat("yyyy/mm/dd");
-			
-			for (int i = 0; i < (cargarDatos()).darTamano(); i++) 
-			{
-				Comparendo x = ( cargarDatos()).get(i);
-				String fecha = formatoFechas.format(x.darFechaHora()); 
-				((List<Comparendo>) comparendos).add(x);
-				
-				tresPartes.add(comparendos.get(i).darFechaHora());
-				tresPartes.add(comparendos.get(i).darClaseVehiculo());
-				tresPartes.add(comparendos.get(i).darInfraccion());
-			}
-			
-			
-			tresPartes.add(comparendos.get(1).darClaseVehiculo());
-			comparendosLlaves.add(comparendos.get(1).darClaseVehiculo());
-			comparendos.get(1);
-			
-			
-		
+
+		ArregloDinamico<Comparendo> comparendos = new ArregloDinamico<Comparendo>();
+		ArregloDinamico<String> comparendosLlaves = new ArregloDinamico<String>();
+		ArregloDinamico<String> tresPartes = new ArregloDinamico<String>();
+
+		SimpleDateFormat formatoFechas = new SimpleDateFormat("yyyy/mm/dd");
+
+		for (int i = 0; i < (cargarDatos()).darTamano(); i++) 
+		{
+			Comparendo x = ( cargarDatos()).get(i);
+			String fecha = formatoFechas.format(x.darFechaHora()); 
+			((List<Comparendo>) comparendos).add(x);
+
+			tresPartes.add(comparendos.get(i).darFechaHora());
+			tresPartes.add(comparendos.get(i).darClaseVehiculo());
+			tresPartes.add(comparendos.get(i).darInfraccion());
+		}
+
+
+		tresPartes.add(comparendos.get(1).darClaseVehiculo());
+		comparendosLlaves.add(comparendos.get(1).darClaseVehiculo());
+		comparendos.get(1);
+
+
+
 		return s;
 	}
-	
+
 	public IArregloDinamico<String> comparendosConInfraccion(String pFecha) throws java.text.ParseException
 	{
 		ArregloDinamico<Comparendo> comparendos = new ArregloDinamico<Comparendo>();
@@ -173,7 +173,7 @@ public class Modelo{
 			if(fecha.equals(pFecha));
 			{
 				comparendos.add(cargarDatos().get(i));
-				
+
 			}
 		}
 		AlgoritmosOrdenamiento.quicksort(comparendos,0,comparendos.darTamano()-1);
@@ -182,12 +182,27 @@ public class Modelo{
 			s = "El comparendo tiene como objectid:" + cargarDatos().get(i).darId() + ", la fecha del comparendo es:" + cargarDatos().get(i).darFechaHora() +", la infraccion del comparendo es"
 					+ cargarDatos().get(i).darInfraccion() +", la case del vehiculo es:" +cargarDatos().get(i).darClaseVehiculo() + 
 					", el tipo de servicio es:" + cargarDatos().get(i).darTipoServicio() +"y la localidad del comparendo es en:" +cargarDatos().get(i).darLocalidad();
-					infracciones.add(s);
+			infracciones.add(s);
 		}
-		
+
 		return infracciones;
 	}
-	
+
+
+	//-------------------------------------------
+	// Requerimientos
+	//-------------------------------------------
+
+
+	//============
+	//PARTE A 
+	//============
+
+	/**
+	 * 
+	 * @param m
+	 * @return
+	 */
 	public Queue<Comparendo> Requerimiento1A (int m)
 	{
 		Queue<Comparendo> x = new Queue<Comparendo>();
@@ -197,47 +212,53 @@ public class Modelo{
 		AlgoritmosOrdenamiento a = new AlgoritmosOrdenamiento();
 		for(int i=0; i< m; i++)
 		{
-		for(int j=0; j <datos.darTamano(); j++)
-		{
-			a.mergeSort(datos);
-			if(c.darTipoServicio().equalsIgnoreCase("Publico"))
+			for(int j=0; j <datos.darTamano(); j++)
 			{
-			   x.enqueue(c);
+				a.mergeSort(datos);
+				if(c.darTipoServicio().equalsIgnoreCase("Publico"))
+				{
+					x.enqueue(c);
+				}
 			}
-		}
-		if(c != null)
-		{
-			a.mergeSort(datos);
-		}
-		for(int j=0; j <datos.darTamano(); j++)
-		{
-			a.mergeSort(datos);
-			if(c.darTipoServicio().equalsIgnoreCase("Oficial"))
+			if(c != null)
 			{
-			   x.enqueue(c);
+				a.mergeSort(datos);
 			}
-		}
-		if(c != null)
-		{
-			a.mergeSort(datos);
-		}
-		for(int j=0; j <datos.darTamano(); j++)
-		{
-			a.mergeSort(datos);
-			if(c.darTipoServicio().equalsIgnoreCase("Particular"))
+			for(int j=0; j <datos.darTamano(); j++)
 			{
-			   x.enqueue(c);
+				a.mergeSort(datos);
+				if(c.darTipoServicio().equalsIgnoreCase("Oficial"))
+				{
+					x.enqueue(c);
+				}
 			}
-		}
-		if(c != null)
-		{
-			a.mergeSort(datos);
-		}
+			if(c != null)
+			{
+				a.mergeSort(datos);
+			}
+			for(int j=0; j <datos.darTamano(); j++)
+			{
+				a.mergeSort(datos);
+				if(c.darTipoServicio().equalsIgnoreCase("Particular"))
+				{
+					x.enqueue(c);
+				}
+			}
+			if(c != null)
+			{
+				a.mergeSort(datos);
+			}
 		}
 		return x;
-		
+
 	}
-	
+
+	/**
+	 * 
+	 * @param m
+	 * @param s
+	 * @return
+	 */
 	public Queue<Comparendo> Requerimiento2A (int m, String s)
 	{
 		Queue<Comparendo> x= new Queue<Comparendo>();
@@ -337,10 +358,17 @@ public class Modelo{
 				}
 			}
 		}
-		
+
 		return x;
 	}
-	
+
+	/**
+	 * 
+	 * @param aa
+	 * @param bb
+	 * @param localidad
+	 * @return
+	 */
 	public Queue<Comparendo> Requerimiento3A (Date aa , Date bb, String localidad)
 	{
 		Queue<Comparendo> x = new Queue<Comparendo>();
@@ -356,7 +384,17 @@ public class Modelo{
 		}
 		return x;
 	}
+
+	//====================
+	// Parte B
+	//====================
 	
+	/**
+	 * 
+	 * @param M
+	 * @return
+	 * @throws ParseException
+	 */
 	public Queue<Comparendo> Requerimiento1B (String M) throws ParseException
 	{
 		Queue<Comparendo> x = new Queue<Comparendo>();
@@ -419,7 +457,15 @@ public class Modelo{
 	}
 
 
-	//2B
+	/**
+	 * 
+	 * @param pMedioDeteccion
+	 * @param pClaseVehiculo
+	 * @param pTipoServicio
+	 * @param pLocali
+	 * @return
+	 * @throws ParseException
+	 */
 	public Queue<Comparendo> Requerimiento2B(String pMedioDeteccion, String pClaseVehiculo, String pTipoServicio, String pLocali) throws ParseException
 	{
 		Queue<Comparendo> x = new Queue<Comparendo>();
@@ -429,12 +475,20 @@ public class Modelo{
 		for (int i = 0; i < cargarDatos().darTamano(); i++)
 		{
 			if(c.darMedio().equals(pMedioDeteccion) && c.darClaseVehiculo().equals(pClaseVehiculo) && c.darTipoServicio().equals(pTipoServicio) && c.darLocalidad().equals(pLocali))
-							x.enqueue(c);
+				x.enqueue(c);
 		}	
 		return x;
 	}
 
-	
+
+	/**
+	 * 
+	 * @param pVehiculo
+	 * @param pLimite_bajo
+	 * @param pLimite_alto
+	 * @return
+	 * @throws ParseException
+	 */
 	public Queue<Comparendo> Requerimiento3B(String pVehiculo, String pLimite_bajo, String pLimite_alto) throws ParseException
 	{
 		Queue<Comparendo> x = new Queue<Comparendo>();
@@ -456,5 +510,30 @@ public class Modelo{
 		}
 		return x;
 	}
+	
+	
+	//===============
+	// Parte C
+	//===============
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
 

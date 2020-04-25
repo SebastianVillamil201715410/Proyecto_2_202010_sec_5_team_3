@@ -5,218 +5,225 @@ import java.util.Iterator;
 
 public class TablaHashSeparada <K extends Comparable<K>,V>
 { 
-	private final static int DEFAULT_SIZE = 2;
-	
-	private ArrayList<NodoSC<K, V>> arreglo; 
+	private static final int INIT_CAPACITY = 4;
 
-	private int M; 
+	//Atributos
 
-	private int N; 	
+	private int tamanho;                                
 
-	public TablaHashSeparada() 
-	{ 
-		arreglo = new ArrayList<>(); 
-		this.M = DEFAULT_SIZE; 
-		this.N = 0; 
+	private int tamDos;                                
 
-		for (int i = 0; i < M; i++) 
-			arreglo.add(null); 
+	private NodoST<K, V>[] nodo;  
+
+	private int totalRehash; 
+
+
+
+	//Metodos 
+
+	/**
+	 * 
+	 */
+	public TablaHashSeparada() {
+		this(INIT_CAPACITY);
 	} 
-	
+
+	/**
+	 * 
+	 */
 	public TablaHashSeparada(int m) 
-	{ 
-		arreglo = new ArrayList<>(); 
-		this.M = m; 
-		this.N = 0; 
+	{
+		this.tamDos = m;
+		nodo = (NodoST<K, V>[]) new NodoST[m];
 
-		for (int i = 0; i < m; i++) 
-			arreglo.add(null); 
+		for (int i = 0; i < m; i++)
+		{
+			nodo[i] = new NodoST<>();	
+		}
 	} 
 
-	public int size() 
-	{ 
-		return N; 
-	} 
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	private int hash(K key) 
+	{
+		return (key.hashCode() & 0x7fffffff) % tamDos;
+	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean isEmpty() 
-	{ 
+	{
 		return size() == 0;
 	}
 
-	public int darM ()
+	/**
+	 * 
+	 * @param chains
+	 */
+	private void resize(int chains) 
 	{
-		return M;
-	}
-	
-	private int hash(K key) 
-	{ 
-		return (key.hashCode() & 0x7fffffff) % M;
-	}
+		TablaHashSeparada<K, V> temporal = new TablaHashSeparada<K, V>(chains);
 
-	private void rehash()
-	{
-		if ((double)N/(double)M <= 5.0) 
+		for (int i = 0; i < tamDos; i++) 
 		{
-			ArrayList<NodeSC<K, V>> temp = arreglo; 
-			arreglo = new ArrayList<>(); 
-			M = 2 * M; 
-			N = 0; 
-			for (int i = 0; i < M; i++) 
-				arreglo.add(null); 
-			for (int i = 0; i < temp.size(); i++) 
-			{ 
-				NodeSC<K, V> tempHead = arreglo.get(i); 			
-				while (tempHead != null) 
-				{ 
-					put(tempHead.darKey(), tempHead.darValue()); 
-					tempHead = tempHead.darNext();
-				} 
-			} 
+			for (K key : nodo[i].keys()) 
+			{
+				temporal.put(key, nodo[i].get(key));
+			}
 		}
+
+		this.tamDos  = temporal.tamDos;
+		this.tamanho  = temporal.tamanho;
+		this.nodo = temporal.nodo;
+
+		totalRehash++;
 	}
 
-	public void put(K key, V value) 
-	{ 
-		int pos = hash(key); 
-		NodeSC<K, V> head = arreglo.get(pos); 
-
-		while (head != null) 
-		{ 
-			if (head.darKey().equals(key)) 
-			{ 
-				head.cambiarValue(value);
-				return; 
-			} 
-			head = head.darNext(); 
-		} 
-
-		N++; 
-		head = arreglo.get(pos); 
-		NodeSC<K, V> nuevo = new NodeSC<K, V>(key, value); 
-		nuevo.cambiarNext(head); 
-		arreglo.set(pos, nuevo); 
-
-		rehash();
-	}
-	
-	public void putInSet(K key, V value)
+	/**
+	 * 
+	 */
+	public int size() 
 	{
-		int pos = hash(key); 
-		NodeSC<K, V> head = arreglo.get(pos); 
-
-		while (head != null) 
-		{ 
-			if (head.darKey().equals(key)) 
-			{ 
-				head.agregarValor(value);
-				return; 
-			} 
-			head = head.darNext(); 
-		} 
-
-		N++; 
-		head = arreglo.get(pos); 
-		NodeSC<K, V> nuevo = new NodeSC<K, V>(key, value); 
-		nuevo.cambiarNext(head); 
-		arreglo.set(pos, nuevo); 
-		rehash();
+		return tamanho;
+	} 
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int tamanoFinal()
+	{
+		return tamDos;
 	}
 
+	/**
+	 * 
+	 */
+	public boolean contains(K key) 
+	{
+		if (key == null) 
+		{
+			throw new IllegalArgumentException("El argumento es nulo");
+		}
+
+		return get(key) != null;
+	} 
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int tamanoInicial()
+	{
+		return INIT_CAPACITY;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public float factorDeCargaFinal()
+	{
+		return tamanho/tamDos;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public double totalRehashes()
+	{
+		return totalRehash;
+	}
+
+	/**
+	 * 
+	 */
 	public V get(K key) 
-	{ 
-		int pos = hash(key); 
-		NodeSC<K, V> head = arreglo.get(pos); 
-
-		while (head != null) 
-		{ 
-			if (head.darKey().equals(key)) 
-				return head.darValue(); 
-			head = head.darNext(); 
-		} 
-		return null; 
-	}
-	
-	public Iterator<V> getSet(K key)
 	{
-		int pos = hash(key); 
-		NodeSC<K, V> head = arreglo.get(pos); 
+		if (key == null)
+		{
+			throw new IllegalArgumentException("argument to get() is null");
+		}
 
-		while (head != null) 
-		{ 
-			if (head.darKey().equals(key)) 
-				return (Iterator<V>) head.darValues(); 
-			head = head.darNext(); 
-		} 
-		return null;
-	}
-	
-	public V delete	(K key) 
-	{ 
-		int pos = hash(key); 
+		int i = hash(key);
+		return nodo[i].get(key);
+	} 
 
-		NodeSC<K, V> head = arreglo.get(pos); 	
-		NodeSC<K, V> prev = null; 
-		while (head != null) 
-		{ 
-			if (head.darKey().equals(key)) 
-				break; 
-
-			prev = head; 
-			head = head.darNext(); 
-		} 
-
-		if (head == null) 
-			return null;  
-
-		N--;
-		if (prev != null) 
-			prev.cambiarNext(head.darNext()); 
-		else
-			arreglo.set(pos, head.darNext()); 
-
-
-		return head.darValue(); 
-	}
-	
-	public Iterator<V> deleteSet(K key)
+	/**
+	 * 
+	 */
+	public void put(K key, V val) 
 	{
-		int pos = hash(key); 
+		if (key == null)
+		{
+			throw new IllegalArgumentException("first argument to put() is null");
+		}
 
-		NodeSC<K, V> head = arreglo.get(pos); 	
-		NodeSC<K, V> prev = null; 
-		while (head != null) 
-		{ 
-			if (head.darKey().equals(key)) 
-				break; 
+		if (val == null) 
+		{
+			delete(key);
+			return;
+		}
 
-			prev = head; 
-			head = head.darNext(); 
-		} 
+		if ( tamanho/tamDos >= 5.0) resize(2*tamDos);
 
-		if (head == null) 
-			return null;  
+		int i = hash(key);
 
-		N--;
-		if (prev != null) 
-			prev.cambiarNext(head.darNext()); 
-		else
-			arreglo.set(pos, head.darNext()); 
+		if (!nodo[i].contains(key))
+		{
+			tamanho++;
+		}
+
+		nodo[i].put(key, val);
+	} 
+
+	/**
+	 * 
+	 */
+	public void delete(K key) 
+	{
+		if (key == null)
+		{
+			throw new IllegalArgumentException("argument to delete() is null");
+		}
+
+		int i = hash(key);
+
+		if (nodo[i].contains(key))
+		{
+			tamanho--;
+		}
+
+		nodo[i].delete(key);
 
 
-		return (Iterator<V>) head.darValues(); 
-	}
-	
+		if (tamDos > INIT_CAPACITY && tamanho <= 2*tamDos)
+		{
+			resize(tamDos/2);
+		}
+	} 
+
+	/**
+	 * 
+	 * @return
+	 */
 	public Iterable<K> keys() 
 	{
-        ILista<K> keys = new Lista<K>();
-        for (int i = 0; i < arreglo.size(); i++)
-        {
-        	NodeSC<K, V> head = arreglo.get(i);
-        	while (head != null)
-        	{
-        		keys.agregar(head.darKey());
-        		head = head.darNext();
-        	}
-        }     
-        return (Iterable<K>) keys;
-    }
+		Queue<K> queue = new Queue<>();
+
+		for (int i = 0; i < tamDos; i++) 
+		{
+			for (K key : nodo[i].keys())
+			{
+				queue.enqueue(key);
+			}
+		}
+		return (Iterable<K>) queue;
+	}
+} 

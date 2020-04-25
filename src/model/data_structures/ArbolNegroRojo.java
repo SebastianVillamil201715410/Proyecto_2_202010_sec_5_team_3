@@ -455,7 +455,7 @@ public class ArbolNegroRojo <Key extends Comparable <Key>,Value> {
      * @return all keys in the symbol table as an {@code Iterable}
      */
     public Iterable<Key> keys() {
-        if (isEmpty()) return new Queue<Key>();
+        if (isEmpty()) return (Iterable<Key>) new Queue<Key>();
         return keysInRange(min(), max());
     }
     /**
@@ -469,6 +469,8 @@ public class ArbolNegroRojo <Key extends Comparable <Key>,Value> {
      * @throws IllegalArgumentException if either {@code lo} or {@code hi}
      *    is {@code null}
      */
+    
+    /**
     public Iterable<Value> valuesInRange(Key lo, Key hi) {
         if (lo == null) throw new IllegalArgumentException("first argument to keys() is null");
         if (hi == null) throw new IllegalArgumentException("second argument to keys() is null");
@@ -476,11 +478,13 @@ public class ArbolNegroRojo <Key extends Comparable <Key>,Value> {
         Queue<Value> queue = new Queue<Value>();
         // if (isEmpty() || lo.compareTo(hi) > 0) return queue;
         keys1(root, queue, lo, hi);
-        return queue;
+        return (Iterable<Value>) queue;
     } 
-
+	*/
     // add the keys between lo and hi in the subtree rooted at x
     // to the queue
+    
+    /**
     private void keys1(Node x, Queue<Value> queue, Key lo, Key hi) { 
         if (x == null) return; 
         int cmplo = lo.compareTo(x.key); 
@@ -488,8 +492,10 @@ public class ArbolNegroRojo <Key extends Comparable <Key>,Value> {
         if (cmplo < 0) keys1(x.left, queue, lo, hi); 
         if (cmplo <= 0 && cmphi >= 0) queue.enqueue(x.val); 
         if (cmphi > 0) keys1(x.right, queue, lo, hi); 
-    } 
-
+    */
+     
+   
+    
     /**
      * Returns all keys in the symbol table in the given range,
      * as an {@code Iterable}.
@@ -508,7 +514,7 @@ public class ArbolNegroRojo <Key extends Comparable <Key>,Value> {
         Queue<Key> queue = new Queue<Key>();
         // if (isEmpty() || lo.compareTo(hi) > 0) return queue;
         keys(root, queue, lo, hi);
-        return queue;
+        return (Iterable<Key>) queue;
     } 
 
     // add the keys between lo and hi in the subtree rooted at x
