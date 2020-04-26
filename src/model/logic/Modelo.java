@@ -21,6 +21,7 @@ import com.google.gson.*;
 import model.data_structures.AlgoritmosOrdenamiento;
 import model.data_structures.ArbolNegroRojo;
 import model.data_structures.ArregloDinamico;
+import model.data_structures.HeapSort;
 import model.data_structures.IArregloDinamico;
 import model.data_structures.IteradorLista;
 import model.data_structures.Lista;
@@ -39,8 +40,11 @@ public class Modelo{
 
 	//ATRIBUTOS
 
-	public static String PATH = "./data/comparendos_dei_2018_small.geojson";
+	//public static String PATH = "./data/comparendos_dei_2018_small.geojson";
 	//public static String PATH = "./data/comparendos_dei_2018.geojson";
+	//public static String PATH = "./data/Comparendos_DEI_2018_Bogotá_D.C_50000_.geojson";
+	public static String PATH = "./data/Comparendos_DEI_2018_Bogotá_D.C_small_50000_sorted.geojson";
+
 
 	public Lista<Comparendo> lista;	//Lista enlazada de comparendos
 
@@ -95,6 +99,8 @@ public class Modelo{
 				Comparendo c = new Comparendo(OBJECTID, FECHA_HORA, DES_INFRAC, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION, LOCALIDAD, longitud, latitud);
 
 				lista.agregar(c);
+				cola.enqueue(c);
+
 			}
 
 		} catch (FileNotFoundException | ParseException e) {
@@ -103,6 +109,7 @@ public class Modelo{
 		}
 		return (ArregloDinamico<Comparendo>) datos;
 	}
+
 
 	public int darTamano()
 	{
@@ -388,7 +395,7 @@ public class Modelo{
 	//====================
 	// Parte B
 	//====================
-	
+
 	/**
 	 * 
 	 * @param M
@@ -510,30 +517,74 @@ public class Modelo{
 		}
 		return x;
 	}
-	
-	
+
+
 	//===============
 	// Parte C
 	//===============
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 
+	 * @param D
+	 * @return
+	 */
+	public Lista Requerimiento1C(int D)
+	{
+		AlgoritmosOrdenamiento<Comparendo> orden = new AlgoritmosOrdenamiento<Comparendo>();
+
+		orden.shellSort(lista);
+
+		try
+		{
+			Lista respuesta = new Lista(); 
+			int contador = 0;
+
+			SimpleDateFormat parser = new SimpleDateFormat("yyyy/MM/dd");
+			Date dateM = parser.parse("2018/01/01");
+			Calendar calendario = Calendar.getInstance();
+			calendario.setTime(dateM);
+			calendario.add(Calendar.DATE, 6);
+			Date maxima = calendario.getTime();
+
+
+			for(Comparable comparado : lista)
+			{
+				if(comparado!=null)
+				{
+					Date actual = ((Comparendo) comparado).darFechaHoraDate();
+
+					if(actual.compareTo(maxima)>0)
+					{
+						respuesta.agregar(contador);
+						contador = 0;
+						calendario.setTime(maxima);
+						calendario.add(Calendar.DATE, 1);
+						dateM = calendario.getTime();
+						calendario.add(Calendar.DATE, D-1);
+						maxima = calendario.getTime();
+					}
+
+					if(actual.compareTo(dateM)>=0 && actual.compareTo(maxima)<=0)
+					{
+						contador++;
+					}
+				}
+			}
+			return respuesta;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
+
+
+
+
+
+
 }
 
