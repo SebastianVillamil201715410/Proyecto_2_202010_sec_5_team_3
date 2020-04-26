@@ -525,14 +525,14 @@ public class Modelo{
 
 	/**
 	 * 
-	 * @param D
+	 * @param rango
 	 * @return
 	 */
-	public Lista Requerimiento1C(int D)
+	public Lista Requerimiento1C(int rango)
 	{
 		AlgoritmosOrdenamiento<Comparendo> orden = new AlgoritmosOrdenamiento<Comparendo>();
 
-		orden.shellSort(lista);
+		orden.shellSort(lista); // Ordena la lista para mejorar la busqueda
 
 		try
 		{
@@ -544,23 +544,25 @@ public class Modelo{
 			Calendar calendario = Calendar.getInstance();
 			calendario.setTime(dateM);
 			calendario.add(Calendar.DATE, 6);
-			Date maxima = calendario.getTime();
+			Date maxima = calendario.getTime(); // Parsea las fechas para poder compararlas 
 
 
-			for(Comparable comparado : lista)
+			for(Comparable comparado : lista) // Recorre los comparendos ordenados 
 			{
-				if(comparado!=null)
+				System.out.println("Rango de fechas		| Comparendos durante el año  \n ---------------------------------------");
+				
+				if(comparado!=null) 
 				{
-					Date actual = ((Comparendo) comparado).darFechaHoraDate();
+					Date actual = ((Comparendo) comparado).darFechaHoraDate(); // 
 
 					if(actual.compareTo(maxima)>0)
 					{
-						respuesta.agregar(contador);
-						contador = 0;
-						calendario.setTime(maxima);
+						respuesta.agregar(contador); // Agrega a la tabla 
+						contador = 0; // Reinicia la  variable contador 
+						calendario.setTime(maxima); 
 						calendario.add(Calendar.DATE, 1);
 						dateM = calendario.getTime();
-						calendario.add(Calendar.DATE, D-1);
+						calendario.add(Calendar.DATE, rango-1);
 						maxima = calendario.getTime();
 					}
 
@@ -579,12 +581,86 @@ public class Modelo{
 		}
 	}
 
-
-
-
-
-
-
+	/**
+	 * 
+	 */
+	public void requerimiento2C()
+	{
+		Lista respuesta = new Lista<Comparendo>();
+		int costoTotal = 0;
+		SimpleDateFormat parser = new SimpleDateFormat("yyyy/MM/dd");
+		Date dateM;
+		String asteriscos = "";
+		String hashtag = "";
+		
+		
+		try {
+			
+			dateM = parser.parse("2018/01/01");
+			Calendar calendario = Calendar.getInstance();
+			calendario.setTime(dateM);
+			calendario.add(Calendar.DATE, 6);
+			Date maxima = calendario.getTime(); // Parsea las fechas para poder compararlas
+			
+			for (int i = 0; i < lista.darTamano(); i++) //recorre para la suma de costo total
+			{
+				Comparendo actual = lista.darElemento(i);
+				
+				if(actual.darFechaHoraDate().compareTo(dateM)== 0) //si el comparendo actual es de 2018
+				{
+					if(actual.darInfraccion().equalsIgnoreCase("SERA INMOVILIZADO"))
+					{
+						costoTotal += 400;
+					}
+					else if(actual.darInfraccion().equalsIgnoreCase("LICENCIA DE CONDUCCIÓN"))
+					{
+						costoTotal += 40;
+					}
+					else
+					{
+						costoTotal += 4;
+					}
+				}
+			}
+			System.out.println("El costo total de Infracciones de 2018 es: " + costoTotal + "\n"); //primera parte dar el costo total
+			
+			// Histograma ASCII 
+			
+			int enEspera = 0; 
+			int procesados = 0;
+			String fechaImprimir = ""; // fecha para incluir en tabla ASCII 
+			
+			System.out.println("Fecha		| Comparendos Procesados	***");
+			System.out.println("			| Comparendos en espera 	***");
+			
+			for (int i = 0; i < cola.getSize(); i++) 
+			{
+				Comparendo actual = cola.dequeue();
+				
+				if(actual.darFechaHoraDate().after(maxima)) // compara con la fecha actual 
+				{
+					enEspera++; //No ha sido procesado
+					hashtag += "*";
+				}
+				else
+				{
+					procesados++; //ya fue procesado
+					asteriscos += "#";
+				}
+				fechaImprimir = actual.darFechaHora();
+			}
+			
+			System.out.println(fechaImprimir+"    | " + asteriscos);
+			System.out.println("          | "+ hashtag);
+			
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
 
 }
 
