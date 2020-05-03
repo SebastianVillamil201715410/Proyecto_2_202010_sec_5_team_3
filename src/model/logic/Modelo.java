@@ -376,16 +376,37 @@ public class Modelo{
 	 * @param localidad
 	 * @return
 	 */
-	public Queue<Comparendo> Requerimiento3A (Date aa , Date bb, String localidad)
+	public Queue<Comparendo> Requerimiento3A (String aa , String bb, String localidad)
 	{
 		Queue<Comparendo> x = new Queue<Comparendo>();
 		Comparendo c = cola.getFirst();
 		AlgoritmosOrdenamiento a = new AlgoritmosOrdenamiento();
 		a.mergeSort(datos);
+		
+		String fechaA = aa.replace("\\", "");
+		SimpleDateFormat sdfA = new SimpleDateFormat("yyyy/MM/dd-HH:MM:ss");
+		Date FechaDateA = null;
+		try {
+			FechaDateA = sdfA.parse(fechaA);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String fechaB = bb.replace("\\", "");
+		SimpleDateFormat sdfB = new SimpleDateFormat("yyyy/MM/dd-HH:MM:ss");
+		Date FechaDateB = null;
+		try {
+			FechaDateB = sdfB.parse(fechaB);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		for(int i=0; i<datos.darTamano(); i++)
 		{
-			if(c.darFechaHoraDate().after(aa))
-				if(c.darFechaHoraDate().before(bb))
+			if(c.darFechaHoraDate().after(FechaDateA))
+				if(c.darFechaHoraDate().before(FechaDateB))
 					if(c.darLocalidad().equalsIgnoreCase(localidad))
 						x.enqueue(c);
 		}

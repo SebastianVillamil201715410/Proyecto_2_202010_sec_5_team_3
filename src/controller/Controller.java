@@ -82,12 +82,12 @@ public class Controller {
 				
 			case 4: 
 				view.printMessage("--------- \nReq A3: Ingrese primera fecha: ");	
-				Date un = lector.next();
+				String un = lector.next();
 				view.printMessage("--------- \nIngrese segunda fecha: ");
 				Date dos = lector.next();
 				view.printMessage("Ingrese nombre de la localidad: ");
 				String tres = lector.next();
-				Queue respi = modelo.Requerimiento3A(un, dos, tres);
+				Queue respi = modelo.Requerimiento3A(string, string, string);
 				for (int i = 0; i < respi.getSize(); i++) 
 				{
 					Comparendo act = (Comparendo) respUno.dequeue();
