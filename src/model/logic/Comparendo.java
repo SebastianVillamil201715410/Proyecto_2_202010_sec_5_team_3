@@ -16,11 +16,12 @@ public class Comparendo implements Comparable<Comparendo>{
 	private String tipo_servi;
 	private String infraccion;
 	private String localidad;
+	private String municipio;
 
 	private double latitud;
 	private double longitud;
 	
-	public Comparendo(int objeId, Date fecha, String descripcion, String detencion, String claseVeh, String tipoSer, String codInfraccion, String localidadP, double lonP, double latP)
+	public Comparendo(int objeId, Date fecha, String descripcion, String detencion, String claseVeh, String tipoSer, String codInfraccion, String localidadP, String municipioP,double lonP, double latP)
 	{
 		objectId = objeId;
 		fecha_hora = fecha;
@@ -30,6 +31,7 @@ public class Comparendo implements Comparable<Comparendo>{
 		tipo_servi = tipoSer;
 		infraccion = codInfraccion;
 		localidad = localidadP;
+		municipio = municipioP;
 		longitud = lonP;
 		latitud = latP;
 	}

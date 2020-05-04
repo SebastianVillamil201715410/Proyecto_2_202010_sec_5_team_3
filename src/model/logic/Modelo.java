@@ -65,7 +65,7 @@ public class Modelo{
 		cola = new Queue<Comparendo>();
 		datos = new ArregloDinamico();
 	}
-
+/**
 	public ArregloDinamico<Comparendo> cargarDatos() {
 
 		JsonReader reader;
@@ -109,8 +109,59 @@ public class Modelo{
 		}
 		return (ArregloDinamico<Comparendo>) datos;
 	}
+*/
 
+	public ArregloDinamico<Comparendo> cargarDatos() 
+	{
+		JsonReader reader;
+		try {
+			reader = new JsonReader(new FileReader(PATH));
+			JsonElement elem = JsonParser.parseReader(reader);
+			JsonArray e2 = elem.getAsJsonObject().get("features").getAsJsonArray();
 
+			SimpleDateFormat parser = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+			Comparendo mayor = null;
+			
+			for(JsonElement e: e2) 
+			{
+				int OBJECTID = e.getAsJsonObject().get("properties").getAsJsonObject().get("OBJECTID").getAsInt();
+
+				String s = e.getAsJsonObject().get("properties").getAsJsonObject().get("FECHA_HORA").getAsString();	
+				String[] s1 = s.split("T");
+				String[] s2 = s1[0].split("-");
+				String s3 = s2[0]+"/"+s2[1]+"/"+s2[2]+" "+s1[1];
+				Date FECHA_HORA = parser.parse(s3); 
+
+				String MEDIO_DETE = e.getAsJsonObject().get("properties").getAsJsonObject().get("MEDIO_DETECCION").getAsString();
+				String CLASE_VEHI = e.getAsJsonObject().get("properties").getAsJsonObject().get("CLASE_VEHICULO").getAsString();
+				String TIPO_SERVI = e.getAsJsonObject().get("properties").getAsJsonObject().get("TIPO_SERVICIO").getAsString();
+				String INFRACCION = e.getAsJsonObject().get("properties").getAsJsonObject().get("INFRACCION").getAsString();
+				String DES_INFRAC = e.getAsJsonObject().get("properties").getAsJsonObject().get("DES_INFRACCION").getAsString();	
+				String LOCALIDAD = e.getAsJsonObject().get("properties").getAsJsonObject().get("LOCALIDAD").getAsString();
+				String MUNICIPIO = e.getAsJsonObject().get("properties").getAsJsonObject().get("MUNICIPIO").getAsString();
+				
+				double longitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(0).getAsDouble();
+
+				double latitud = e.getAsJsonObject().get("geometry").getAsJsonObject().get("coordinates").getAsJsonArray()
+						.get(1).getAsDouble();
+
+				Comparendo c = new Comparendo(OBJECTID, FECHA_HORA, MEDIO_DETE, CLASE_VEHI, TIPO_SERVI, INFRACCION, DES_INFRAC, LOCALIDAD, MUNICIPIO, longitud, latitud);
+				lista.agregar(c);
+				cola.enqueue(c);
+			
+			}
+			e2 =null;
+			return (ArregloDinamico<Comparendo>) datos;
+		} 
+		catch (Exception e) 
+		{
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}	
+	}
+	
 	public int darTamano()
 	{
 		return lista.darTamano();
