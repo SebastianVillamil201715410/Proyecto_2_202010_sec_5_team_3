@@ -1,5 +1,6 @@
 package controller;
 
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -30,7 +31,7 @@ public class Controller {
 		modelo = new Modelo();
 	}
 
-	public void run() 
+	public void run() throws ParseException 
 	{
 		Scanner lector = new Scanner(System.in);
 		boolean fin = false;
@@ -84,13 +85,13 @@ public class Controller {
 				view.printMessage("--------- \nReq A3: Ingrese primera fecha: ");	
 				String un = lector.next();
 				view.printMessage("--------- \nIngrese segunda fecha: ");
-				Date dos = lector.next();
+				String dos = lector.next();
 				view.printMessage("Ingrese nombre de la localidad: ");
 				String tres = lector.next();
-				Queue respi = modelo.Requerimiento3A(string, string, string);
+				Queue respi = modelo.Requerimiento3A(un, dos, tres);
 				for (int i = 0; i < respi.getSize(); i++) 
 				{
-					Comparendo act = (Comparendo) respUno.dequeue();
+					Comparendo act = (Comparendo) respi.dequeue();
 					view.printMessage(act.darId() + act.darTipoServicio() + act.darInfraccion() + act.darFechaHora() + act.darClaseVehiculo());
 				}
 				break;
@@ -100,7 +101,7 @@ public class Controller {
 				String numB = lector.next();
 				Queue respB = modelo.Requerimiento1B(numB);
 				for (int i = 0; i < modelo.darTamano(); i++) {
-					Comparendo act = (Comparendo) resp.dequeue();
+					Comparendo act = (Comparendo) respB.dequeue();
 					view.printMessage(act.darId() + act.darTipoServicio() + act.darInfraccion() + act.darFechaHora() + act.darClaseVehiculo());
 				}
 				break;
@@ -116,7 +117,7 @@ public class Controller {
 				Queue respo = modelo.Requerimiento2B(bUno, bDos, bTres, bCua);
 				for (int i = 0; i < respo.getSize(); i++) 
 				{
-					Comparendo act = (Comparendo) respUno.dequeue();
+					Comparendo act = (Comparendo) respo.dequeue();
 					view.printMessage(act.darId() + act.darTipoServicio() + act.darInfraccion() + act.darFechaHora() + act.darClaseVehiculo());
 				}
 				break;
@@ -131,7 +132,7 @@ public class Controller {
 				Queue respq = modelo.Requerimiento3B(cUno, cDos, cTres);
 				for (int i = 0; i < respq.getSize(); i++) 
 				{
-					Comparendo act = (Comparendo) respUno.dequeue();
+					Comparendo act = (Comparendo) respq.dequeue();
 					view.printMessage(act.darId() + act.darTipoServicio() + act.darInfraccion() + act.darFechaHora() + act.darClaseVehiculo());
 				}
 				break;
